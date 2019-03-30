@@ -1,1 +1,2 @@
-# The repository for spider group.
+# OSH大作业
+队员：詹佑翊 曹宇昂 万琪 琚泽谦 张衎
