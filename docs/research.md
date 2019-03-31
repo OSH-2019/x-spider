@@ -7,9 +7,19 @@
       - [什么是分布式计算](#什么是分布式计算)
       - [分布式计算的发展](#分布式计算的发展)
       - [分布式计算的现状](#分布式计算的现状)
+      - [网格计算](#网格计算)
+        - [简介](#简介)
+        - [应用](#应用)
+        - [存在的问题](#存在的问题)
     - [物联网技术](#物联网技术)
       - [物联网简介](#物联网简介)
       - [物联网的潜力](#物联网的潜力)
+      - [Rust](#Rust)
+        - [简介](#简介)
+        - [特点](#特点)
+        - [优势](#优势)
+        - [原则](#原则)
+        - [设计来源](#设计来源)
   - [立项依据](#立项依据)
     - [物联网设备数量庞大](#物联网设备数量庞大)
     - [分布式计算框架Rain的轻量级的特点](#分布式计算框架rain的轻量级的特点)
@@ -63,7 +73,7 @@ Rain是一种用于大规模基于任务的管道的开源分布式计算框架�
 - Python/C++/Rust。Rain中的任务提供了一种在Python，C++和Rust中定义用户定义任务的方法。
 - 监控。使用项目本身提供的dashboard，Rain支持在线与事后监控。
 
-![rain_dashboard](./files/rain_dashboard.gif)
+![rain_dashboard](/Users/Cyxzk/Documents/repository/x-spider/docs/files/rain_dashboard.gif)
 
 #### 内部结构
 
@@ -71,7 +81,7 @@ Rain基础设施由中央服务器组件（server)和调控器组件(governor)�
 
 用户通过客户端应用程序与服务器交互。rain是通过python客户机API分发的。
 
-![rain_arch](./files/rain_arch.svg)
+![rain_arch](/Users/Cyxzk/Documents/repository/x-spider/docs/files/rain_arch.svg)
 
 #### Rain的基础设施
 
@@ -115,29 +125,48 @@ with client.new_session() as session:  # Creates a session
 
 会话中的图表如下所示：
 
-![helloworld](./files/helloworld.svg)
+![helloworld]()
 
 ### 分布式计算
 
 #### 什么是分布式计算
 分布式计算是计算机科学中一个研究分布式系统的领域，是利用互联网上的计算机的中央处理器的闲置处理能力来解决大型计算问题的一种计算科学。
+
 随着计算机的普及，个人电脑开始进入千家万户。与之伴随产生的是电脑的利用问题。越来越多的电脑处于闲置状态，即使在开机状态下中央处理器的潜力也远远不能被完全利用。互联网的出现, 使得连接调用所有这些拥有限制计算资源的计算机系统成为了现实。
+
 一些本身非常复杂的但是却很适合于划分为大量的更小的计算片断的问题被提出来，交给分布式计算中的服务端（server），服务端将这些小的计算部分分配给联网参与的客户端（client），客户端对其进行处理，处理的结果通过网络发送给服务端，服务端将结果汇总，得到最终的结果。目前一些较大的分布式计算项目的处理能力已经可以达到甚而超过目前世界上速度最快的巨型计算机。
 
 #### 分布式计算的发展
 二十世纪六十年代末问世的阿帕网（ARPANET）是互联网的前身，阿帕网电子邮件在七十年代初问世，它可能是大规模分布式应用的最早的例子，进入二十世纪九十年代，因特网迅速地商业化。商业利用也极大地推进了因特网的发展。在此背景下，计算形式也从传统的集中计算到分时计算，直到出现分布式计算、并行计算等。
-九十年代志愿计算（分布式计算）逐渐普及，到1999年SETI@HOME在全球范围内利用了联网PC的力量以解决CPU密集型问题
+
+九十年代志愿计算（分布式计算）逐渐普及，到1999年SETI@HOME在全球范围内利用了联网PC的力量以解决CPU密集型问题。
+
 2000年以来，出现了很多优秀的分布式计算框架，2004年Google公布了部分MapReduce实现的细节，受此启发的Doug Cutting等人用2年的时间实现了DFS和MapReduce机制，这便是Hadoop项目。2005年Hadoop被正式引入Apache基金会，2006年成为一套完整独立的软件。Apache Spark 是专为大规模数据处理而设计的快速通用的计算引擎，是加州大学伯克利分校的AMPlab所开源的类Hadoop MapReduce的通用并行框架，该框架于2009年问世，2010年正式开源，2013年成为Apache基金会的项目。Apache Storm是一个分布式的、高容错的实时计算系统，2010年Storm核心概念被提出，2011年Storm正式问世，2013年Storm成为Apache的开源项目，2014年步入顶尖开源行列。
 
 #### 分布式计算的现状
 在过去全球的各种分布式计算已有很多，这些计算大多互无联系、独立使用自己的一套软件。这种分布式计算互相割据的格局很不利于发展的需要。比如，某个生物学研究机构需要利用世界各地志愿者的计算机来模拟蛋白质折叠的过程，那个生物学研究机构没有分布式计算方面的专业人才，而社会上也并没有任何公司可以提供这样的服务，他们就不得不自己花费大量精力用于开发分布式计算的服务器、客户端。这样一来，原来可以用于研究生物的时间用在了别的地方。刚才提到的生物学研究机构就是美国斯坦福大学的PANDE小组。
+
 为了改变这种杂乱无章的割据，加州大学伯克利分校（UC Berkeley）首先提出了建立BOINC的想法。BOINC（Berkeley Open Infrastructure for Network Computing）的中文全称是伯克利开放式网络计算平台，他能够把许多不同的分布式计算项目联系起来统一管理。并对计算机资源进行统一分配（比方您对研究艾滋病药物和探索地外文明同时感兴趣，您就可以同时选择两个运行，并设置优先级）。对统计评分系统进行统一管理（无论你在为哪个项目工作，只要你奉献CPU时间长，就积分高）。有了这样的统一管理，的确给PANDE小组这样的科学研究机构提供了便利！
+
 主要运行于集群上的主流分布式计算框架有Spark，Storm等等，许多IT公司的分布式计算平台都是基于它们或者在它们的基础上做了修改而得到的。
 但是看似强大的计算机系统，实际上很多地方都比人类世界要脆弱得多。特别是在分布式计算机集群系统中，如下几个方面很容易出现问题：
+
 + 节点之间的网络通信是不可靠的，包括消息延迟、乱序和内容错误等；
 + 节点的处理时间无法保障，结果可能出现错误，甚至节点自身可能发生宕机；
 + 同步调用可以简化设计，但会严重降低分布式系统的可扩展性，甚至使其退化为单点系统。
 这些问题也是分布式领域亟待解决的难题。
+
+#### 网格计算
+##### 简介
+网格计算是一种分布式计算体系结构，由大量的计算机连接起来解决一个复杂的问题。在网格计算模型中，服务器或个人计算机运行独立的任务，并由Internet或低速网络松散地连接。计算机可以直接连接，也可以通过调度系统连接。
+
+网格计算的大多数应用程序没有时间依赖性，大型项目通常部署在许多国家。研究项目以及其他程序使用计算机的闲置算力，在后台运行数周。
+##### 应用
+SETI@home项目是一个的外星智能搜索项目，是网格计算的一个例子，它基于加州大学伯克利分校的BOINC网格计算软件。数以百万计的个人电脑在没有设定完成日期的射电望远镜数据片段上运行搜索程序。网格计算也可以处理其他项目，比如遗传学研究、药物候选匹配，甚至是成吉思汗之墓的搜索。
+##### 存在的问题
+对于网格计算的应用，由于一些计算节点很可能会断开连接或发生故障，因此要确保模型中包含冗余以及健壮的故障恢复。
+
+网格的另一个问题是安全性，因为成员节点上的控制通常非常松散。例如，几乎任何人都可以报名参加SETI项目。
 
 ### 物联网技术
 
@@ -253,57 +282,10 @@ MapReduce的核心是两个功能:Map和Reduce。 Map函数将磁盘中的输入
 ![MapReduce](./files/MapReduce.jpg "MapReduce")
 
 ### Apache Spark
-#### 简介
-
-Apache Spark是一个开源分布式计算框架，最初是由加州大学伯克利分校AMPLab所开发。
-
-Spark的核心是RDD（Resilient Distributed Datasets），即弹性分布式数据集。它是对数据的高度抽象概念，弹性可理解为数据存储弹性（可存储在内存，也可存储在磁盘）; 分布式可理解为数据分布在不同节点。RDD是分布式数据的逻辑抽象，物理数据存储在不同的节点上，但对用户透明。
-
 它具有以下特点：
-
-- 执行速度极快：首先它支持将计算任务的中间结果放在内存中而不是HDFS上，这样可以加快速度，根据评测最高可以提升100倍。
-- 支持多种运行模式：除了可以独立在集群上执行任务以外，Spark还支持将任务执行在EC2或Apache Hadoop的YARN上，也可以从HDFS、Cassandra、HBase、Hive等。各种数据存储系统中读取数据。
-- 更多更通用的计算模型：I-ladoop只提供了较为底层的MapReduce模型，编程人员往往需要大量编码来解决简单的任务。而spark则提供了SQL接口、APachespark流模型接口、MLib机器学习接口以及GraphX图形计算接口等多种接口，可以方便应用于多种场合，提高开发人员的开发效率。
-
-#### Spark运行的基本流程
-
-1.构建Spark Application的运行环境（启动SparkContext），SparkContext向资源管理器（可以是Standalone、Mesos或YARN）注册并申请运行Executor资源。
-
-2.资源管理器分配Executor资源并启动StandaloneExecutorBackend，Executor运行情况将随着心跳发送到资源管理器上。
-
-3.SparkContext构建成DAG图，将DAG图分解成Stage，并把Taskset发送给Task Scheduler。Executor向SparkContext申请Task，Task Scheduler将Task发放给Executor运行同时SparkContext将应用程序代码发放给Executor。
-
-4.Task在Executor上运行，运行完毕释放所有资源。
-
-<img src="./files/Spark.png" width="400px" />
-
-#### Spark的计算流程
-
-1.Spark内核会在需要计算发生的时刻绘制一张关于计算路径的有向无环图（DAG）。
-
-2.将DAG划分为Stage
-
-Spark Application中可以因为不同的Action触发众多的job，一个Application中可以有很多的job，每个job是由一个或者多个Stage构成的，后面的Stage依赖于前面的Stage，也就是说只有前面依赖的Stage计算完毕后，后面的Stage才会运行。
-
-核心算法：从后往前回溯，遇到窄依赖加入本stage，遇见宽依赖进行Stage切分。Spark内核会从触发Action操作的那个RDD开始从后往前推，首先会为最后一个RDD创建一个stage，然后继续倒推，如果发现对某个RDD是宽依赖，那么就会将宽依赖的那个RDD创建一个新的stage，那个RDD就是新的stage的最后一个RDD。然后依次类推，继续继续倒推，根据窄依赖或者宽依赖进行stage的划分，直到所有的RDD全部遍历完成为止。
-
-<img src="./files/SparkComp.png" width="500px" />
-
-3.提交Stages
-
-DAGScheduler通过TaskScheduler接口提交任务集，这个任务集最终会触发TaskScheduler构建一个TaskSetManager的实例来管理这个任务集的生命周期，对于DAGScheduler来说，提交调度阶段的工作到此就完成了。而TaskScheduler则会在得到计算资源的时候，进一步通过TaskSetManager调度具体的任务到对应的Executor节点上进行运算。
-
-4.监控Job、Task、Executor
-
-DAGScheduler监控Job与Task：要保证相互依赖的作业调度阶段能够得到顺利的调度执行，DAGScheduler需要监控当前作业调度阶段乃至任务的完成情况。这通过对外暴露一系列的回调函数来实现的，对于TaskScheduler来说，这些回调函数主要包括任务的开始结束失败、任务集的失败，DAGScheduler根据这些任务的生命周期信息进一步维护作业和调度阶段的状态信息。
-
-DAGScheduler监控Executor的生命状态：TaskScheduler通过回调函数通知DAGScheduler具体的Executor的生命状态，如果某一个Executor崩溃了，则对应的调度阶段任务集的ShuffleMapTask的输出结果也将标志为不可用，这将导致对应任务集状态的变更，进而重新执行相关计算任务，以获取丢失的相关据。
-
-5.获取任务执行结果
-
-一个具体的任务在Executor中执行完毕后，其结果需要以某种形式返回给DAGScheduler，根据任务类型的不同，任务结果的返回方式也不同。
-
-结果共有两种，分别是中间结果与最终结果：对于FinalStage所对应的任务，返回给DAGScheduler的是运算结果本身，而对于中间调度阶段对应的任务ShuffleMapTask，返回给DAGScheduler的是一个MapStatus里的相关存储信息，而非结果本身，这些存储位置信息将作为下一个调度阶段的任务获取输入数据的依据。
++ 执行速度极快：首先它支持将计算任务的中间结果放在内存中而不是HDFS上，这样可以加快速度，根据评测最高可以提升100倍。
++ 支持多种运行模式：除了可以独立在集群上执行任务以外，Spark还支持将任务执行在EC2或Apache Hadoop的YARN上，也可以从HDFS、Cassandra、HBase、Hive等。各种数据存储系统中读取数据。
++ 更多更通用的计算模型：I-ladoop只提供了较为底层的MapReduce模型，编程人员往往需要大量编码来解决简单的任务。而spark则提供了SQL接口、APachespark流模型接口、MLib机器学习接口以及GraphX图形计算接口等多种接口，可以方便应用于多种场合，提高开发人员的开发效率。
 
 
 ### Apache Storm
@@ -349,6 +331,14 @@ Bigflow目前原生支持的语言是Python，因此克服了PySpark中的低效
 
 
 ## 参考文献
+https://www.javatpoint.com/rust-tutorial
+
+https://stevedonovan.github.io/rust-gentle-intro/
+
+https://learning-rust.github.io/docs/a1.why_rust.html
+
+https://searchdatacenter.techtarget.com/definition/grid-computing
+
 https://www.talend.com/resources/what-is-mapreduce/
 
 https://stanford.edu/~rezab/classes/cme323/S15/notes/lec8.pdf
