@@ -147,6 +147,61 @@ with client.new_session() as session:  # Creates a session
 #### 物联网的潜力
 根据分析公司Gartner表示，到2020年，全球将有超过260亿部联网设备。物联网是一个巨大的“物联网”(也包括人)网络。关系将是人与人、人与物、物与物之间的关系。如果我们可以将这些设备的算力加以利用，哪怕单个设备算力相对匮乏或是我们只能利用其中一部分，庞大的数量仍能保证了惊人的计算资源。
 
+### Rust
+
+#### 简介
+Rust最初是由Mozilla员工Graydon Hoare作为个人项目设计和开发的。Mozilla从2009年开始赞助这个项目，并在2010年正式宣布。第一个稳定的版本Rust 1.0在2015年5月15日发布。
+
+Rust是一种系统编程语言，专注于三个目标：安全性、速度和并发性。
+
+Rust是免费的开源软件，即任何人都可以自由使用软件，而且源代码是公开共享的，人们可以改进软件的设计。
+
+在2016年、2017年和2018年的stack overflow开发者调查中，Rust被评为“最受喜爱的编程语言”之一。
+
+#### 特点
+Rust是非常年轻和非常现代的语言。它是一种编译编程语言（compiled programming 
+language），后端使用LLVM。另外，Rust是一种多范式编程语言，它支持命令式过程、并发参与者、面向对象和纯函数风格。它还支持静态和动态样式的泛型编程和元编程。
+
+Rust最独特和引人注目的特性之一是所有权（Ownership），它用于实现内存安全性。Rust开放地创建内存指针，使用引用和借用（References and Borrowing）检查编译时内存指针的有限访问,通过检查生存期（Lifetimes）来自动执行编译时的内存管理。
+
+Rust的语法类似于C++语言。
+
+
+#### 优势
+Rust是一种静态的强类型系统编程语言。
+
+**静态**意味着所有类型在编译时都是已知的。
+
+**强类型**的设计使得编写不正确的程序更加困难，因而编译一旦成功，就对正确性有了很好的保证。
+
+**系统**意味着在完全控制内存使用的情况下生成尽可能好的机器码。所以它的用途非常硬核，主要有操作系统、设备驱动程序以及甚至可能没有操作系统的嵌入式系统。
+
+然而，它也是一种非常适合编写普通应用程序代码的语言。与C和C++的最大区别在于，Rust在默认情况下是安全的，它检查所有的内存访问，意外损坏内存是不可能的。
+
+#### 原则
+Rust体现的原则包括:
+
+* 严格执行对数据安全借用
+* 用函数、方法和闭包对数据进行操作
+* 用元组、结构体和枚举体来聚合数据
+* 用于模式匹配来选择和分解数据
+* 用特征来定义数据上的行为
+
+#### 设计来源
+它的设计元素来源广泛：
+
+* Abstract Machine Model: C
+* Data types: C, SML, OCaml, Lisp, Limbo
+* Optional Bindings: Swift
+* Hygienic Macros: Scheme
+* Functional Programming: Haskell, OCaml, F#
+* Attributes: ECMA-335
+* Memory Model and Memory Management: C++, ML Kit, Cyclone
+* Type Classes: Haskell
+* Crate: Assembly in the ECMA-335 CLI model
+* Channels and Concurrency: Newsqueak, Alef, Limbo
+* Message passing and Thread failure: Erlang
+
 ## 立项依据
 
 ### 物联网设备数量庞大
