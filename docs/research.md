@@ -63,7 +63,7 @@ Rain是一种用于大规模基于任务的管道的开源分布式计算框架�
 - Python/C++/Rust。Rain中的任务提供了一种在Python，C++和Rust中定义用户定义任务的方法。
 - 监控。使用项目本身提供的dashboard，Rain支持在线与事后监控。
 
-![rain_dashboard](/Users/Cyxzk/Documents/repository/x-spider/docs/files/rain_dashboard.gif)
+![rain_dashboard](./files/rain_dashboard.gif)
 
 #### 内部结构
 
@@ -71,7 +71,7 @@ Rain基础设施由中央服务器组件（server)和调控器组件(governor)�
 
 用户通过客户端应用程序与服务器交互。rain是通过python客户机API分发的。
 
-![rain_arch](/Users/Cyxzk/Documents/repository/x-spider/docs/files/rain_arch.svg)
+![rain_arch](./files/rain_arch.svg)
 
 #### Rain的基础设施
 
@@ -115,7 +115,7 @@ with client.new_session() as session:  # Creates a session
 
 会话中的图表如下所示：
 
-![helloworld]()
+![helloworld](./files/helloworld.svg)
 
 ### 分布式计算
 
