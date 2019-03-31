@@ -6,7 +6,7 @@
       - [概述](#概述)
       - [内部结构](#内部结构)
       - [rain的基础设施](#rain的基础设施)
-      - [Python Client](#Python Client)
+      - [Python_Client](#Python_Client)
       - [简单实例](#简单实例)
     - [分布式计算](#分布式计算)
       - [什么是分布式计算](#什么是分布式计算)
@@ -86,7 +86,7 @@ Rain基础设施由中央服务器组件（server)和调控器组件(governor)�
 - governor和governor之间的直接沟通。
 - 执行监控的基本仪表盘。
 
-#### Python Client
+#### Python_Client
 
 - 基于任务的编程模型。
 - 与Rain核心基础设施的高级接口。
