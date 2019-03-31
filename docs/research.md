@@ -253,10 +253,57 @@ MapReduce的核心是两个功能:Map和Reduce。 Map函数将磁盘中的输入
 ![MapReduce](./files/MapReduce.jpg "MapReduce")
 
 ### Apache Spark
+#### 简介
+
+Apache Spark是一个开源分布式计算框架，最初是由加州大学伯克利分校AMPLab所开发。
+
+Spark的核心是RDD（Resilient Distributed Datasets），即弹性分布式数据集。它是对数据的高度抽象概念，弹性可理解为数据存储弹性（可存储在内存，也可存储在磁盘）; 分布式可理解为数据分布在不同节点。RDD是分布式数据的逻辑抽象，物理数据存储在不同的节点上，但对用户透明。
+
 它具有以下特点：
-+ 执行速度极快：首先它支持将计算任务的中间结果放在内存中而不是HDFS上，这样可以加快速度，根据评测最高可以提升100倍。
-+ 支持多种运行模式：除了可以独立在集群上执行任务以外，Spark还支持将任务执行在EC2或Apache Hadoop的YARN上，也可以从HDFS、Cassandra、HBase、Hive等。各种数据存储系统中读取数据。
-+ 更多更通用的计算模型：I-ladoop只提供了较为底层的MapReduce模型，编程人员往往需要大量编码来解决简单的任务。而spark则提供了SQL接口、APachespark流模型接口、MLib机器学习接口以及GraphX图形计算接口等多种接口，可以方便应用于多种场合，提高开发人员的开发效率。
+
+- 执行速度极快：首先它支持将计算任务的中间结果放在内存中而不是HDFS上，这样可以加快速度，根据评测最高可以提升100倍。
+- 支持多种运行模式：除了可以独立在集群上执行任务以外，Spark还支持将任务执行在EC2或Apache Hadoop的YARN上，也可以从HDFS、Cassandra、HBase、Hive等。各种数据存储系统中读取数据。
+- 更多更通用的计算模型：I-ladoop只提供了较为底层的MapReduce模型，编程人员往往需要大量编码来解决简单的任务。而spark则提供了SQL接口、APachespark流模型接口、MLib机器学习接口以及GraphX图形计算接口等多种接口，可以方便应用于多种场合，提高开发人员的开发效率。
+
+#### Spark运行的基本流程
+
+1.构建Spark Application的运行环境（启动SparkContext），SparkContext向资源管理器（可以是Standalone、Mesos或YARN）注册并申请运行Executor资源。
+
+2.资源管理器分配Executor资源并启动StandaloneExecutorBackend，Executor运行情况将随着心跳发送到资源管理器上。
+
+3.SparkContext构建成DAG图，将DAG图分解成Stage，并把Taskset发送给Task Scheduler。Executor向SparkContext申请Task，Task Scheduler将Task发放给Executor运行同时SparkContext将应用程序代码发放给Executor。
+
+4.Task在Executor上运行，运行完毕释放所有资源。
+
+<img src="./files/Spark.png" width="400px" />
+
+#### Spark的计算流程
+
+1.Spark内核会在需要计算发生的时刻绘制一张关于计算路径的有向无环图（DAG）。
+
+2.将DAG划分为Stage
+
+Spark Application中可以因为不同的Action触发众多的job，一个Application中可以有很多的job，每个job是由一个或者多个Stage构成的，后面的Stage依赖于前面的Stage，也就是说只有前面依赖的Stage计算完毕后，后面的Stage才会运行。
+
+核心算法：从后往前回溯，遇到窄依赖加入本stage，遇见宽依赖进行Stage切分。Spark内核会从触发Action操作的那个RDD开始从后往前推，首先会为最后一个RDD创建一个stage，然后继续倒推，如果发现对某个RDD是宽依赖，那么就会将宽依赖的那个RDD创建一个新的stage，那个RDD就是新的stage的最后一个RDD。然后依次类推，继续继续倒推，根据窄依赖或者宽依赖进行stage的划分，直到所有的RDD全部遍历完成为止。
+
+<img src="./files/SparkComp.png" width="500px" />
+
+3.提交Stages
+
+DAGScheduler通过TaskScheduler接口提交任务集，这个任务集最终会触发TaskScheduler构建一个TaskSetManager的实例来管理这个任务集的生命周期，对于DAGScheduler来说，提交调度阶段的工作到此就完成了。而TaskScheduler则会在得到计算资源的时候，进一步通过TaskSetManager调度具体的任务到对应的Executor节点上进行运算。
+
+4.监控Job、Task、Executor
+
+DAGScheduler监控Job与Task：要保证相互依赖的作业调度阶段能够得到顺利的调度执行，DAGScheduler需要监控当前作业调度阶段乃至任务的完成情况。这通过对外暴露一系列的回调函数来实现的，对于TaskScheduler来说，这些回调函数主要包括任务的开始结束失败、任务集的失败，DAGScheduler根据这些任务的生命周期信息进一步维护作业和调度阶段的状态信息。
+
+DAGScheduler监控Executor的生命状态：TaskScheduler通过回调函数通知DAGScheduler具体的Executor的生命状态，如果某一个Executor崩溃了，则对应的调度阶段任务集的ShuffleMapTask的输出结果也将标志为不可用，这将导致对应任务集状态的变更，进而重新执行相关计算任务，以获取丢失的相关据。
+
+5.获取任务执行结果
+
+一个具体的任务在Executor中执行完毕后，其结果需要以某种形式返回给DAGScheduler，根据任务类型的不同，任务结果的返回方式也不同。
+
+结果共有两种，分别是中间结果与最终结果：对于FinalStage所对应的任务，返回给DAGScheduler的是运算结果本身，而对于中间调度阶段对应的任务ShuffleMapTask，返回给DAGScheduler的是一个MapStatus里的相关存储信息，而非结果本身，这些存储位置信息将作为下一个调度阶段的任务获取输入数据的依据。
 
 
 ### Apache Storm
