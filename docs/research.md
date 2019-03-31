@@ -1,4 +1,3 @@
-# 分布式计算调研报告
 - [IoT设备的算力利用](#iot设备的算力利用)
   - [小组成员](#小组成员)
   - [项目简介](#项目简介)
@@ -26,7 +25,6 @@
   - [参考文献](#参考文献)
 
 # IoT设备的算力利用
->>>
 
 ## 小组成员
 队长：詹佑翊
@@ -109,7 +107,7 @@ Rain本身无法部署在arm架构的树莓派上，但由于其轻量的特点�
 
 ### bare metal programming
 “裸机编程”是指没有各种抽象层的编程，或者像一些人所说的没有操作系统的编程。应用程序是裸机实现中唯一运行在处理器上的软件。选择用裸机架构来绕过操作系统，基于裸机打造一套存储定制的软件堆栈，而将硬件访问，任务调度，事件处理，多核同步，这几个原本需要OS来主导的环节省去了。
-
+ 
 相比于应用运行在操作系统上，对于一个相当简单的应用程序，操作系统会消耗更多的资源，比如RAM、flash等。因此，选择裸机框架可以大大提升性能。其中，最直接的好处是IOPS和延迟表现的很大提升。
 
 本次大作业中我们将尝试实现越过树莓派操作系统，将rain直接部署在裸机上，以实现树莓派算力的充分利用。
@@ -144,63 +142,15 @@ MapReduce的核心是两个功能:Map和Reduce。 Map函数将磁盘中的输入
 ![MapReduce](./files/MapReduce.jpg "MapReduce")
 
 ### Apache Spark
-#### 简介
-
-Apache Spark是一个开源分布式计算框架，最初是由加州大学伯克利分校AMPLab所开发。
-
-Spark的核心是RDD（Resilient Distributed Datasets），即弹性分布式数据集。它是对数据的高度抽象概念，弹性可理解为数据存储弹性（可存储在内存，也可存储在磁盘）; 分布式可理解为数据分布在不同节点。RDD是分布式数据的逻辑抽象，物理数据存储在不同的节点上，但对用户透明。
-
 它具有以下特点：
-
 + 执行速度极快：首先它支持将计算任务的中间结果放在内存中而不是HDFS上，这样可以加快速度，根据评测最高可以提升100倍。
 + 支持多种运行模式：除了可以独立在集群上执行任务以外，Spark还支持将任务执行在EC2或Apache Hadoop的YARN上，也可以从HDFS、Cassandra、HBase、Hive等。各种数据存储系统中读取数据。
 + 更多更通用的计算模型：I-ladoop只提供了较为底层的MapReduce模型，编程人员往往需要大量编码来解决简单的任务。而spark则提供了SQL接口、APachespark流模型接口、MLib机器学习接口以及GraphX图形计算接口等多种接口，可以方便应用于多种场合，提高开发人员的开发效率。
 
-#### Spark运行的基本流程
-
-1.构建Spark Application的运行环境（启动SparkContext），SparkContext向资源管理器（可以是Standalone、Mesos或YARN）注册并申请运行Executor资源。
-
-2.资源管理器分配Executor资源并启动StandaloneExecutorBackend，Executor运行情况将随着心跳发送到资源管理器上。
-
-3.SparkContext构建成DAG图，将DAG图分解成Stage，并把Taskset发送给Task Scheduler。Executor向SparkContext申请Task，Task Scheduler将Task发放给Executor运行同时SparkContext将应用程序代码发放给Executor。
-
-4.Task在Executor上运行，运行完毕释放所有资源。
-
-<img src="./files/Spark.png" width="400px" />
-
-#### Spark的计算流程
-
-1.Spark内核会在需要计算发生的时刻绘制一张关于计算路径的有向无环图（DAG）。
-
-2.将DAG划分为Stage
-
-Spark Application中可以因为不同的Action触发众多的job，一个Application中可以有很多的job，每个job是由一个或者多个Stage构成的，后面的Stage依赖于前面的Stage，也就是说只有前面依赖的Stage计算完毕后，后面的Stage才会运行。
-
-核心算法：从后往前回溯，遇到窄依赖加入本stage，遇见宽依赖进行Stage切分。Spark内核会从触发Action操作的那个RDD开始从后往前推，首先会为最后一个RDD创建一个stage，然后继续倒推，如果发现对某个RDD是宽依赖，那么就会将宽依赖的那个RDD创建一个新的stage，那个RDD就是新的stage的最后一个RDD。然后依次类推，继续继续倒推，根据窄依赖或者宽依赖进行stage的划分，直到所有的RDD全部遍历完成为止。
-
-<img src="./files/SparkComp.png" width="500px" />
-
-3.提交Stages
-
-DAGScheduler通过TaskScheduler接口提交任务集，这个任务集最终会触发TaskScheduler构建一个TaskSetManager的实例来管理这个任务集的生命周期，对于DAGScheduler来说，提交调度阶段的工作到此就完成了。而TaskScheduler则会在得到计算资源的时候，进一步通过TaskSetManager调度具体的任务到对应的Executor节点上进行运算。
-
-4.监控Job、Task、Executor
-
-DAGScheduler监控Job与Task：要保证相互依赖的作业调度阶段能够得到顺利的调度执行，DAGScheduler需要监控当前作业调度阶段乃至任务的完成情况。这通过对外暴露一系列的回调函数来实现的，对于TaskScheduler来说，这些回调函数主要包括任务的开始结束失败、任务集的失败，DAGScheduler根据这些任务的生命周期信息进一步维护作业和调度阶段的状态信息。
-
-DAGScheduler监控Executor的生命状态：TaskScheduler通过回调函数通知DAGScheduler具体的Executor的生命状态，如果某一个Executor崩溃了，则对应的调度阶段任务集的ShuffleMapTask的输出结果也将标志为不可用，这将导致对应任务集状态的变更，进而重新执行相关计算任务，以获取丢失的相关据。
-
-5.获取任务执行结果
-
-一个具体的任务在Executor中执行完毕后，其结果需要以某种形式返回给DAGScheduler，根据任务类型的不同，任务结果的返回方式也不同。
-
-结果共有两种，分别是中间结果与最终结果：对于FinalStage所对应的任务，返回给DAGScheduler的是运算结果本身，而对于中间调度阶段对应的任务ShuffleMapTask，返回给DAGScheduler的是一个MapStatus里的相关存储信息，而非结果本身，这些存储位置信息将作为下一个调度阶段的任务获取输入数据的依据。
 
 ### Apache Storm
-
 Apache storm是一个开源的、实时的计算平台，最初由社交分析公司Backtype的NathanMarz编写，后来被Twitter收购，并作为开源软件发布。从整体架构上看，Apache Storm和Hadoop非常类似。Apache Storm从架构基础本身就实现了实时计算和数据处理保序的功能，而且从概念上看，Apache Storm秉承了许多Hadoop的概念、术语和操作方法。
 Apache Storm作为实时处理系统中的一个典型案例，其特点和优势如下。
-
 + 高可扩展性：Apache Storm可以每秒处理海量消息请求，同时该系统也极易扩展，
 只需增加机器并提高计算拓扑的并行程度即可。根据官方数据，在包含10个节点的Apache Storm集群中可以每秒处理一百万个消息请求，由此可以看出Apache Storm的实时处理性能优越。
 + 高容错性：如果在消息处理过程中出现了异常，Apache Storm的消息源会重新发送相关元组数据，确保请求被重新处理。
@@ -218,6 +168,21 @@ Pregel在编程模型上遵循以图节点为中心的模式，在超级步S中�
 
 ### Baidu Bigflow
 Baidu Bigflow是百度的一套计算框架，它致力于提供一套简单易用的接口来描述用户的计算任务，并使同一套代码可以运行在不同的执行引擎之上。用户基本可以不去关心Bigflow的计算真正运行在哪里，可以像写一个单机的程序一样写出自己的逻辑， Bigflow会将这些计算分发到相应的执行引擎之上执行。
+![基本框架](./files/Bigflow 基本框架.png "Bigflow")
++ 目的：
+使分布式程序写起来更简单，测起来更方便，跑起来更高效，维护起来更容易，迁移起来成本更小。
++ 特性：
+   + 高性能
+Bigflow的所有的计算均为惰性求值，能够看到尽可能大的计算过程并进行关键参数的自动优化。另其执行层使用C++实现，用户的一些代码逻辑会被翻译为C++执行，有较大的性能提升。根据百度公司内部的实际业务测试来看，Bigflow性能远高于用户手写的作业。平均来说，通过现有业务改写过来的作业平均，其性能都比原用户代码提升了100%+。
+![性能提升](./files/Bigflow 性能提升.png "Bigflow")
+   + 易于使用
+Bigflow的接口表面看起来很像Spark，但实际使用后会发现Bigflow使用一些独特的设计使得Bigflow的代码更像是单机程序，例如，屏蔽了partitioner的概念，支持嵌套的分布式数据集等，使得其接口更加易于理解，并且拥有更强的代码可复用性。
+![DataSet嵌套分组](./files/Bigflow DataSet嵌套分组.png "Bigflow")
+   + 支持python
+Bigflow目前原生支持的语言是Python，因此克服了PySpark中的低效率，不支持某些CPython库或一些功能仅在Scala和Java中可用，而在PySpark中暂时处于不可用状态的缺点，从而在性能、功能、易用性等方面都对Python用户比较友好。
+
+
+
 
 ## 参考文献
 https://www.talend.com/resources/what-is-mapreduce/
