@@ -169,7 +169,7 @@ Pregel在编程模型上遵循以图节点为中心的模式，在超级步S中�
 ### Baidu Bigflow
 Baidu Bigflow是百度的一套计算框架，它致力于提供一套简单易用的接口来描述用户的计算任务，并使同一套代码可以运行在不同的执行引擎之上。用户基本可以不去关心Bigflow的计算真正运行在哪里，可以像写一个单机的程序一样写出自己的逻辑， Bigflow会将这些计算分发到相应的执行引擎之上执行。
 
-![基本框架](./files/Bigflow 基本框架.png "Bigflow")
+![基本框架](./files/Bigflow 基本框架.png)
 
 + 目的：
 使分布式程序写起来更简单，测起来更方便，跑起来更高效，维护起来更容易，迁移起来成本更小。
@@ -177,12 +177,12 @@ Baidu Bigflow是百度的一套计算框架，它致力于提供一套简单易�
    + 高性能
 Bigflow的所有的计算均为惰性求值，能够看到尽可能大的计算过程并进行关键参数的自动优化。另其执行层使用C++实现，用户的一些代码逻辑会被翻译为C++执行，有较大的性能提升。根据百度公司内部的实际业务测试来看，Bigflow性能远高于用户手写的作业。平均来说，通过现有业务改写过来的作业平均，其性能都比原用户代码提升了100%+。
 
-![性能提升](./files/Bigflow 性能提升.png "Bigflow")
+![性能提升](./files/Bigflow 性能提升.png)
 
    + 易于使用
 Bigflow的接口表面看起来很像Spark，但实际使用后会发现Bigflow使用一些独特的设计使得Bigflow的代码更像是单机程序，例如，屏蔽了partitioner的概念，支持嵌套的分布式数据集等，使得其接口更加易于理解，并且拥有更强的代码可复用性。
 
-![DataSet嵌套分组](./files/Bigflow DataSet嵌套分组.png "Bigflow")
+![DataSet嵌套分组](./files/Bigflow DataSet嵌套分组.png)
 
    + 支持python
 Bigflow目前原生支持的语言是Python，因此克服了PySpark中的低效率，不支持某些CPython库或一些功能仅在Scala和Java中可用，而在PySpark中暂时处于不可用状态的缺点，从而在性能、功能、易用性等方面都对Python用户比较友好。
