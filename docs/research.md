@@ -53,14 +53,70 @@ IoT设备种类繁多，我们选取其中有代表性的树莓派进行部署�
 
 ### [Rain](https://github.com/substantic/rain)
 
-Rain是一种用于大规模基于任务的管道的开源分布式计算框架。尽管此项目仍处于早期版本，但它仍是一个功能齐全的项目。此分布式计算框架具有以下特点：
-+ 数据流编程。Rain中的计算被定义为任务的流程图。任务可以是内置函数，Python代码或外部应用程序，短而轻或长时间运行和繁重。该系统旨在将任何代码集成到管道中，尊重其资源需求，并处理非常大的任务图（数十万个任务）。
-+ 使用方便。Rain的设计易于部署，从单节点部署到大规模分布式系统。
-+ Rust核心，Python API。为了安全和高效，Rain用Rust编写，并为Rain核心基础架构提供了高级Python API，甚至支持开箱即用的Python任务。
-+ Python/C++/Rust。Rain中的任务提供了一种在Python，C++和Rust中定义用户定义任务的方法。
-+ 监控。使用项目本身提供的dashboard，Rain支持在线与事后监控。
+#### 概述
 
-![rainarch](./files/arch.svg)
+Rain是一种用于大规模基于任务的管道的开源分布式计算框架。尽管此项目仍处于早期版本，但它仍是一个功能齐全的项目。RAIN旨在降低进入分布式计算世界的门槛，它的目的是提供一个轻量级但是依然健壮的分布式框架，该框架具有直观的python API、简单的安装和部署，以及深入的监控。具体来说，此分布式计算框架有以下特点：
+
+- 数据流编程。Rain中的计算被定义为任务的流程图。任务可以是内置函数，Python代码或外部应用程序，短而轻或长时间运行和繁重。该系统旨在将任何代码集成到管道中，尊重其资源需求，并处理非常大的任务图（数十万个任务）。
+- 使用方便。Rain的设计易于部署，从单节点部署到大规模分布式系统。
+- Rust核心，Python API。为了安全和高效，Rain用Rust编写，并为Rain核心基础架构提供了高级Python API，甚至支持开箱即用的Python任务。
+- Python/C++/Rust。Rain中的任务提供了一种在Python，C++和Rust中定义用户定义任务的方法。
+- 监控。使用项目本身提供的dashboard，Rain支持在线与事后监控。
+
+![rain_dashboard](/Users/Cyxzk/Documents/repository/x-spider/docs/files/rain_dashboard.gif)
+
+#### 内部结构
+
+Rain基础设施由中央服务器组件（server)和调控器组件(governor)组成，它们可以在不同的机器上运行。调控器可以生成一个或多个执行器，这些执行器是提供外部代码执行的本地进程。Rain由python executor分配。Rain还为C++和Rust提供了编写专用执行器的库。
+
+用户通过客户端应用程序与服务器交互。rain是通过python客户机API分发的。
+
+![rain_arch](/Users/Cyxzk/Documents/repository/x-spider/docs/files/rain_arch.svg)
+
+#### Rain的基础设施
+
+- 基于内部任务间依赖关系的基本调度启发式方法。
+- Rust实施使构建、部署和变得容易，运行可靠。
+- 以一体式二进制形式分发。
+- governor和governor之间的直接沟通。
+- 执行监控的基本仪表盘。
+
+#### Python Client
+
+- 基于任务的编程模型。
+- 与Rain核心基础设施的高级接口。
+- 轻松定义各种类型的任务及其相互依赖关系。
+- 基于Python3模块。
+- 代码在客户端运行，创建会话和任务图，执行和查询会话。在那里，任务只被创建和声明，从未实际执行过。
+
+- 在管理器上的远程pyhton任务中运行的python代码。此代码可以访问实际的输入数据，但只能看到相邻的数据对象（输入和输出）。
+
+#### 简单实例
+
+rain将计算表示为任务和数据对象的图形。在图形构建过程中，任务并不急于执行。相反，实际执行是在显式提交之后由RAIN基础设施管理的。这将导致一个编程模型，在该模型中，您首先只定义一个图，然后执行它。
+
+```
+from rain.client import Client, tasks, blob
+
+client = Client("localhost", 7210)  # Create a connection to the server
+                                    # running at localhost:7210
+
+with client.new_session() as session:  # Creates a session
+
+    a = blob("Hello ")    # Create a definition of data object in the current session
+    b = blob("world!")    # Create a definition of data object in the current session
+    tasks.Concat([a, b])  # Create a task definition in the current session
+                          # that concatenates input data objects
+
+    session.submit()      # Send the created graph into the server, where the computation
+                          # is performed.
+    session.wait_all()    # Wait until all submitted tasks are completed
+```
+
+会话中的图表如下所示：
+
+![helloworld]()
+
 ### 分布式计算
 
 #### 什么是分布式计算
@@ -107,7 +163,7 @@ Rain本身无法部署在arm架构的树莓派上，但由于其轻量的特点�
 
 ### bare metal programming
 “裸机编程”是指没有各种抽象层的编程，或者像一些人所说的没有操作系统的编程。应用程序是裸机实现中唯一运行在处理器上的软件。选择用裸机架构来绕过操作系统，基于裸机打造一套存储定制的软件堆栈，而将硬件访问，任务调度，事件处理，多核同步，这几个原本需要OS来主导的环节省去了。
- 
+
 相比于应用运行在操作系统上，对于一个相当简单的应用程序，操作系统会消耗更多的资源，比如RAM、flash等。因此，选择裸机框架可以大大提升性能。其中，最直接的好处是IOPS和延迟表现的很大提升。
 
 本次大作业中我们将尝试实现越过树莓派操作系统，将rain直接部署在裸机上，以实现树莓派算力的充分利用。
