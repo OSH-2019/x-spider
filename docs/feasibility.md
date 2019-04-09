@@ -255,7 +255,7 @@ Fielding是一个非常重要的人，他是HTTP协议（1.0版和1.1版）的�
 
 下面附上官方给出的比较图片：
 
-![infinity_times_faster](./images/infinity_times_faster.png)
+![infinity_times_faster](./files/infinity_times_faster.png)
 
 
 
