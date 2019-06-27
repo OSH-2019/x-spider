@@ -1,0 +1,82 @@
+# Copyright [2017] [taurus.ai]
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
+PROJECT(yijinjing-lite)
+
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+
+INCLUDE(GetGitRevisionDescription)
+GET_GIT_HEAD_REVISION(GIT_REFSPEC GIT_HASH)
+
+
+SET(Boost_USE_MULTITHREADED ON)
+SET(Boost_USE_STATIC_LIBS OFF)
+SET(Boost_USE_STATIC_RUNTIME OFF)
+
+#FIND_PACKAGE(Boost 1.57.0 COMPONENTS locale date_time filesystem system thread serialization math_tr1 chrono regex program_options REQUIRED)
+FIND_PACKAGE(Boost 1.57.0 COMPONENTS  filesystem system thread regex REQUIRED)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+
+MESSAGE(STATUS "Boost_INCLUDE_DIR: " ${Boost_INCLUDE_DIR})
+MESSAGE(STATUS "BOOST_LIBRARY_DIR: " ${BOOST_LIBRARY_DIR})
+MESSAGE(STATUS "Boost_LIBRARIES: " ${Boost_LIBRARIES})
+
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -Wall")
+OPTION(BUILD_SHARED_LIBS "turn OFF for .a libs" ON)
+#OPTION(USE_SERVICE "use memory service" ON)
+OPTION(USE_HASH_CODE "use hash code when writing" OFF)
+
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Yijinjing-lite in-process Communicate System")
+SET(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+SET(CPACK_PACKAGE_VERSION_MAJOR "0")
+SET(CPACK_PACKAGE_VERSION_MINOR "0")
+SET(CPACK_PACKAGE_VERSION_PATCH "2")
+
+SET(CPACK_GENERATOR "ZIP;TGZ")
+SET(CPACK_RPM_PACKAGE_RELEASE "${BUILDTIME}")
+#SET(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
+SET(CPACK_RPM_PACKAGE_GROUP "${PROJECT_NAME}")
+SET(CPACK_PACKAGE_DEFAULT_LOCATION "/yijinjing-lite")
+SET(CPACK_PACKAGING_INSTALL_PREFIX "/yijinjing-lite")
+
+
+
+
+ADD_SUBDIRECTORY(include/yijinjing/journal)
+ADD_SUBDIRECTORY(include/yijinjing/paged)
+ADD_SUBDIRECTORY(include/yijinjing/utils)
+
+ADD_SUBDIRECTORY(mycode)
+
+
+
+#SET(CPACK_RPM_PACKAGE_AUTOREQ " no")
+INCLUDE(CPack)
