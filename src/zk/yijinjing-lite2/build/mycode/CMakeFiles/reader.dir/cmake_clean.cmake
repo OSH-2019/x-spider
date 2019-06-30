@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/reader.dir/reader.cpp.o"
   "CMakeFiles/reader.dir/stat.cpp.o"
-  "CMakeFiles/reader.dir/readdata.cpp.o"
+  "CMakeFiles/reader.dir/readSingleData.cpp.o"
   "../libreader.pdb"
   "../libreader.so"
 )

@@ -19,15 +19,15 @@ using namespace yijinjing;
 #define KUNGFU_JOURNAL_FOLDER "/tmp/yijinjing-lite/journal/"  /**< where we put journal files */
 
 extern "C" int spdreader();
-int spdreader(){
+int spdreader(long wtime){
 
         int cpu_id_ = 0;
         cpu_set_affinity(cpu_id_);
 
-    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", -1, "Client_R");
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", wtime, "Client_R");
     // JournalReaderPtr reader2 = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER,"test2",-1,"Client_R2");
 
-    bool flag = reader->seekTimeJournalByName("test1", 1561603421415942724);
+    bool flag = reader->seekTimeJournalByName("test1", wtime);
     yijinjing::FramePtr frame;
     for(int i=0;i<100;i++){
         frame = reader->getNextFrame();
@@ -36,7 +36,6 @@ int spdreader(){
             short msg_type = frame->getMsgType();
             void* data = frame->getData();
             int len = frame->getDataLength();
-            printf("%d %s %d",msg_type,data,len);
         }
         else{
             printf("error");

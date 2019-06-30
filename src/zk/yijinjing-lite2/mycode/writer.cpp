@@ -33,8 +33,8 @@ using namespace yijinjing;
 //     return 0;
 // }
 
-extern "C" int spdwriter(char* data,int len,short msgType,byte lastFlag);
-int spdwriter(char* data,int len,short msgType,byte lastFlag){
+extern "C" long spdwriter(char* data,int len,short msgType,byte lastFlag);
+long spdwriter(char* data,int len,short msgType,byte lastFlag){
     int cpu_id_ = 1;
     cpu_set_affinity(cpu_id_);
       
@@ -46,9 +46,10 @@ int spdwriter(char* data,int len,short msgType,byte lastFlag){
         // strncpy(data,"ss",len-1);
 
         long wtime = getNanoTime();
-        writer1->write_frame(data,len,msgType,lastFlag);
+        writer1->write_frame(data,len+1,msgType,lastFlag);
         // long ntime = getNanoTime();
         // printf("%lu\n",ntime);
+        // printf("writer.cpp:%lu\n",wtime);
         return wtime;
 
 //     int len = 10;

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/hubert/projects/yijinjing-lite2/mycode/readdata.cpp" "/home/hubert/projects/yijinjing-lite2/build/mycode/CMakeFiles/reader.dir/readdata.cpp.o"
+  "/home/hubert/projects/yijinjing-lite2/mycode/readSingleData.cpp" "/home/hubert/projects/yijinjing-lite2/build/mycode/CMakeFiles/reader.dir/readSingleData.cpp.o"
   "/home/hubert/projects/yijinjing-lite2/mycode/reader.cpp" "/home/hubert/projects/yijinjing-lite2/build/mycode/CMakeFiles/reader.dir/reader.cpp.o"
   "/home/hubert/projects/yijinjing-lite2/mycode/stat.cpp" "/home/hubert/projects/yijinjing-lite2/build/mycode/CMakeFiles/reader.dir/stat.cpp.o"
   )

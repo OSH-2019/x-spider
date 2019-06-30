@@ -17,7 +17,7 @@ add_library(writer SHARED writer.cpp stat.cpp)
 TARGET_LINK_LIBRARIES(writer paged journal)
 
 #add_executable(reader reader.cpp stat.cpp)
-add_library(reader SHARED reader.cpp stat.cpp readdata.cpp)
+add_library(reader SHARED reader.cpp stat.cpp readSingleData.cpp)
 TARGET_LINK_LIBRARIES(reader paged journal)
 
 add_executable(yjj_page_service page_service.cpp)

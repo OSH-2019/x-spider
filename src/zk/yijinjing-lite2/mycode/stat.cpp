@@ -16,9 +16,9 @@ void cpu_set_affinity(int cpu_id){
     if (sched_setaffinity(0, sizeof(mask), &mask) < 0) {
         std::cout<<"set cpu affinity failed, cpu_id " << cpu_id << std::endl;
     }
-    else{
-        std::cout<<"set cpu affinity success, cpu_id " << cpu_id << std::endl;
-    }
+    // else{
+    //     std::cout<<"set cpu affinity success, cpu_id " << cpu_id << std::endl;
+    // }
 #endif    
 }
 

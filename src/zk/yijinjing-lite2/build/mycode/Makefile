@@ -250,32 +250,32 @@ page_service.cpp.s:
 	cd /home/hubert/projects/yijinjing-lite2/build && $(MAKE) -f mycode/CMakeFiles/yjj_page_service.dir/build.make mycode/CMakeFiles/yjj_page_service.dir/page_service.cpp.s
 .PHONY : page_service.cpp.s
 
-readdata.o: readdata.cpp.o
+readSingleData.o: readSingleData.cpp.o
 
-.PHONY : readdata.o
+.PHONY : readSingleData.o
 
 # target to build an object file
-readdata.cpp.o:
-	cd /home/hubert/projects/yijinjing-lite2/build && $(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readdata.cpp.o
-.PHONY : readdata.cpp.o
+readSingleData.cpp.o:
+	cd /home/hubert/projects/yijinjing-lite2/build && $(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readSingleData.cpp.o
+.PHONY : readSingleData.cpp.o
 
-readdata.i: readdata.cpp.i
+readSingleData.i: readSingleData.cpp.i
 
-.PHONY : readdata.i
+.PHONY : readSingleData.i
 
 # target to preprocess a source file
-readdata.cpp.i:
-	cd /home/hubert/projects/yijinjing-lite2/build && $(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readdata.cpp.i
-.PHONY : readdata.cpp.i
+readSingleData.cpp.i:
+	cd /home/hubert/projects/yijinjing-lite2/build && $(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readSingleData.cpp.i
+.PHONY : readSingleData.cpp.i
 
-readdata.s: readdata.cpp.s
+readSingleData.s: readSingleData.cpp.s
 
-.PHONY : readdata.s
+.PHONY : readSingleData.s
 
 # target to generate assembly for a file
-readdata.cpp.s:
-	cd /home/hubert/projects/yijinjing-lite2/build && $(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readdata.cpp.s
-.PHONY : readdata.cpp.s
+readSingleData.cpp.s:
+	cd /home/hubert/projects/yijinjing-lite2/build && $(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readSingleData.cpp.s
+.PHONY : readSingleData.cpp.s
 
 reader.o: reader.cpp.o
 
@@ -381,9 +381,9 @@ help:
 	@echo "... page_service.o"
 	@echo "... page_service.i"
 	@echo "... page_service.s"
-	@echo "... readdata.o"
-	@echo "... readdata.i"
-	@echo "... readdata.s"
+	@echo "... readSingleData.o"
+	@echo "... readSingleData.i"
+	@echo "... readSingleData.s"
 	@echo "... reader.o"
 	@echo "... reader.i"
 	@echo "... reader.s"

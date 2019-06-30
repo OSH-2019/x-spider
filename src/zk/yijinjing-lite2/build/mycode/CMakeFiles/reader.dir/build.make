@@ -105,42 +105,42 @@ mycode/CMakeFiles/reader.dir/stat.cpp.o.provides: mycode/CMakeFiles/reader.dir/s
 mycode/CMakeFiles/reader.dir/stat.cpp.o.provides.build: mycode/CMakeFiles/reader.dir/stat.cpp.o
 
 
-mycode/CMakeFiles/reader.dir/readdata.cpp.o: mycode/CMakeFiles/reader.dir/flags.make
-mycode/CMakeFiles/reader.dir/readdata.cpp.o: ../mycode/readdata.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hubert/projects/yijinjing-lite2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object mycode/CMakeFiles/reader.dir/readdata.cpp.o"
-	cd /home/hubert/projects/yijinjing-lite2/build/mycode && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/reader.dir/readdata.cpp.o -c /home/hubert/projects/yijinjing-lite2/mycode/readdata.cpp
+mycode/CMakeFiles/reader.dir/readSingleData.cpp.o: mycode/CMakeFiles/reader.dir/flags.make
+mycode/CMakeFiles/reader.dir/readSingleData.cpp.o: ../mycode/readSingleData.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hubert/projects/yijinjing-lite2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object mycode/CMakeFiles/reader.dir/readSingleData.cpp.o"
+	cd /home/hubert/projects/yijinjing-lite2/build/mycode && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/reader.dir/readSingleData.cpp.o -c /home/hubert/projects/yijinjing-lite2/mycode/readSingleData.cpp
 
-mycode/CMakeFiles/reader.dir/readdata.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/reader.dir/readdata.cpp.i"
-	cd /home/hubert/projects/yijinjing-lite2/build/mycode && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hubert/projects/yijinjing-lite2/mycode/readdata.cpp > CMakeFiles/reader.dir/readdata.cpp.i
+mycode/CMakeFiles/reader.dir/readSingleData.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/reader.dir/readSingleData.cpp.i"
+	cd /home/hubert/projects/yijinjing-lite2/build/mycode && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hubert/projects/yijinjing-lite2/mycode/readSingleData.cpp > CMakeFiles/reader.dir/readSingleData.cpp.i
 
-mycode/CMakeFiles/reader.dir/readdata.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/reader.dir/readdata.cpp.s"
-	cd /home/hubert/projects/yijinjing-lite2/build/mycode && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hubert/projects/yijinjing-lite2/mycode/readdata.cpp -o CMakeFiles/reader.dir/readdata.cpp.s
+mycode/CMakeFiles/reader.dir/readSingleData.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/reader.dir/readSingleData.cpp.s"
+	cd /home/hubert/projects/yijinjing-lite2/build/mycode && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hubert/projects/yijinjing-lite2/mycode/readSingleData.cpp -o CMakeFiles/reader.dir/readSingleData.cpp.s
 
-mycode/CMakeFiles/reader.dir/readdata.cpp.o.requires:
+mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.requires:
 
-.PHONY : mycode/CMakeFiles/reader.dir/readdata.cpp.o.requires
+.PHONY : mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.requires
 
-mycode/CMakeFiles/reader.dir/readdata.cpp.o.provides: mycode/CMakeFiles/reader.dir/readdata.cpp.o.requires
-	$(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readdata.cpp.o.provides.build
-.PHONY : mycode/CMakeFiles/reader.dir/readdata.cpp.o.provides
+mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.provides: mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.requires
+	$(MAKE) -f mycode/CMakeFiles/reader.dir/build.make mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.provides.build
+.PHONY : mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.provides
 
-mycode/CMakeFiles/reader.dir/readdata.cpp.o.provides.build: mycode/CMakeFiles/reader.dir/readdata.cpp.o
+mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.provides.build: mycode/CMakeFiles/reader.dir/readSingleData.cpp.o
 
 
 # Object files for target reader
 reader_OBJECTS = \
 "CMakeFiles/reader.dir/reader.cpp.o" \
 "CMakeFiles/reader.dir/stat.cpp.o" \
-"CMakeFiles/reader.dir/readdata.cpp.o"
+"CMakeFiles/reader.dir/readSingleData.cpp.o"
 
 # External object files for target reader
 reader_EXTERNAL_OBJECTS =
 
 libreader.so: mycode/CMakeFiles/reader.dir/reader.cpp.o
 libreader.so: mycode/CMakeFiles/reader.dir/stat.cpp.o
-libreader.so: mycode/CMakeFiles/reader.dir/readdata.cpp.o
+libreader.so: mycode/CMakeFiles/reader.dir/readSingleData.cpp.o
 libreader.so: mycode/CMakeFiles/reader.dir/build.make
 libreader.so: libpaged.so
 libreader.so: libjournal.so
@@ -163,7 +163,7 @@ mycode/CMakeFiles/reader.dir/build: libreader.so
 
 mycode/CMakeFiles/reader.dir/requires: mycode/CMakeFiles/reader.dir/reader.cpp.o.requires
 mycode/CMakeFiles/reader.dir/requires: mycode/CMakeFiles/reader.dir/stat.cpp.o.requires
-mycode/CMakeFiles/reader.dir/requires: mycode/CMakeFiles/reader.dir/readdata.cpp.o.requires
+mycode/CMakeFiles/reader.dir/requires: mycode/CMakeFiles/reader.dir/readSingleData.cpp.o.requires
 
 .PHONY : mycode/CMakeFiles/reader.dir/requires
 
