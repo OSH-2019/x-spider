@@ -18,16 +18,17 @@ using namespace yijinjing;
 
 #define KUNGFU_JOURNAL_FOLDER "/tmp/yijinjing-lite/journal/"  /**< where we put journal files */
 
-extern "C" int spdreader();
-int spdreader(long wtime){
+extern "C" int spdreader(long wtime,char* jname);
+extern "C" bool spdExpireJournal(char* journalName);
+int spdreader(long wtime,char* jname){
 
         int cpu_id_ = 0;
         cpu_set_affinity(cpu_id_);
 
-    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", wtime, "Client_R");
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, jname, wtime, "Client_R");
     // JournalReaderPtr reader2 = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER,"test2",-1,"Client_R2");
 
-    bool flag = reader->seekTimeJournalByName("test1", wtime);
+    bool flag = reader->seekTimeJournalByName(jname, wtime);
     yijinjing::FramePtr frame;
     for(int i=0;i<100;i++){
         frame = reader->getNextFrame();
@@ -93,4 +94,10 @@ int spdreader(long wtime){
     //     ++k;
     // }
     // Calculator::print_footer();
+}
+
+bool spdExpireJournal(char* journalName){
+    printf("%s",journalName);
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, journalName, -1, "Client_R");
+    return reader->expireJournalByName(journalName);
 }

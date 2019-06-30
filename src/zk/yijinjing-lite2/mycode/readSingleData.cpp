@@ -20,22 +20,22 @@ using namespace yijinjing;
 
 #define KUNGFU_JOURNAL_FOLDER "/tmp/yijinjing-lite/journal/"  /**< where we put journal files */
 
-extern "C" char* spdReadSingleData(long rtime,int a);
-extern "C" short spdReadSingleMsgType(long rtime,int a);
-extern "C" void spdPrintAllData(long startTime,int a);
-extern "C" int spdConvertAllToCSV(long startTime,char* fileName);
+extern "C" char* spdReadSingleData(long rtime,char* jname);
+extern "C" short spdReadSingleMsgType(long rtime,char* jname);
+extern "C" void spdPrintAllData(long startTime,char* jname);
+extern "C" int spdConvertAllToCSV(long startTime,char* fileName,char* jname);
 
 
-char* spdReadSingleData(long rtime,int a){
+char* spdReadSingleData(long rtime,char* jname){
         //  printf("readdata.cpp:%lu\n",rtime);
         //  printf("nowTime:%lu\n",getNanoTime());
         int cpu_id_ = 0;
         cpu_set_affinity(cpu_id_);
 
-    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", -1, "Client_R");
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, jname, -1, "Client_R");
     // JournalReaderPtr reader2 = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER,"test2",-1,"Client_R2");
 
-    bool flag = reader->seekTimeJournalByName("test1", rtime);
+    bool flag = reader->seekTimeJournalByName(jname, rtime);
     yijinjing::FramePtr frame;
 
     frame = reader->getNextFrame();
@@ -101,14 +101,14 @@ char* spdReadSingleData(long rtime,int a){
     // Calculator::print_footer();
 }
 
-short spdReadSingleMsgType(long rtime, int a){
+short spdReadSingleMsgType(long rtime, char* jname){
     int cpu_id_ = 0;
         cpu_set_affinity(cpu_id_);
 
-    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", -1, "Client_R");
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, jname, -1, "Client_R");
     // JournalReaderPtr reader2 = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER,"test2",-1,"Client_R2");
 
-    bool flag = reader->seekTimeJournalByName("test1", rtime);
+    bool flag = reader->seekTimeJournalByName(jname, rtime);
     yijinjing::FramePtr frame;
 
     frame = reader->getNextFrame();
@@ -124,15 +124,15 @@ short spdReadSingleMsgType(long rtime, int a){
     return msgType;
 }
 
-long spdGetNextFrame(long time){
-    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", time, "Client_R");
+long spdGetNextFrame(long time,char* jname){
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, jname, time, "Client_R");
     
     yijinjing::FramePtr frame;
     frame = reader->getNextFrame();
 }
 
-void spdPrintAllData(long startTime, int a){
-    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", startTime, "Client_R");
+void spdPrintAllData(long startTime, char* jname){
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, jname, startTime, "Client_R");
     yijinjing::FramePtr frame;
     frame = reader->getNextFrame();
 
@@ -149,8 +149,8 @@ void spdPrintAllData(long startTime, int a){
     printf("End of Print Data\n");
 }
 
-int spdConvertAllToCSV(long startTime,char* fileName){
-    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, "test1", startTime, "Client_R");
+int spdConvertAllToCSV(long startTime,char* fileName, char* jname){
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, jname, startTime, "Client_R");
     yijinjing::FramePtr frame;
     frame = reader->getNextFrame();
     

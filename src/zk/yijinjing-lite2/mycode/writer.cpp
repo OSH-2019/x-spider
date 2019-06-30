@@ -33,13 +33,14 @@ using namespace yijinjing;
 //     return 0;
 // }
 
-extern "C" long spdwriter(char* data,int len,short msgType,byte lastFlag);
-long spdwriter(char* data,int len,short msgType,byte lastFlag){
+extern "C" long spdwriter(char* data,int len,short msgType,byte lastFlag,char* jname);
+// extern "C" void spdInitJournal(char* dir, char* jname);
+long spdwriter(char* data,int len,short msgType,byte lastFlag,char* jname){
     int cpu_id_ = 1;
     cpu_set_affinity(cpu_id_);
       
     
-    JournalWriterPtr writer1 = yijinjing::JournalWriter::create(KUNGFU_JOURNAL_FOLDER, "test1", "Client1");
+    JournalWriterPtr writer1 = yijinjing::JournalWriter::create(KUNGFU_JOURNAL_FOLDER, jname, "Client1");
     // JournalWriterPtr writer2 = yijinjing::JournalWriter::create(KUNGFU_JOURNAL_FOLDER, "test2", "Client2");
         // int len = 10;
         // char* data = new char[len];
@@ -88,3 +89,10 @@ long spdwriter(char* data,int len,short msgType,byte lastFlag){
 //     Calculator::print_footer();
 
 }
+
+// void spdInitJournal(char* dir, char* jname){
+//     JournalWriterPtr writer = yijinjing::JournalWriter::create(KUNGFU_JOURNAL_FOLDER, "test1", "Client1");
+//     printf("success\n");
+//     return;
+//     writer->init(dir,jname);
+// }

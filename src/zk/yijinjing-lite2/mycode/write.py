@@ -17,9 +17,7 @@ for i in range(1,10):
     print(str1)
     print(f2)
 
-
-
-    #for i in range(1,100):
+#for i in range(1,100):
 #   f2 = rd.myreader()
 
     
