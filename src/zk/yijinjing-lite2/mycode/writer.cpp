@@ -9,6 +9,9 @@
 #include "yijinjing/journal/PageProvider.h"
 
 #include "stat.h"
+#include <fstream>
+#include <sstream>
+#include <vector>
 
 using yijinjing::JournalWriterPtr;
 using namespace yijinjing;
@@ -35,6 +38,8 @@ using namespace yijinjing;
 
 extern "C" long spdwriter(char* data,int len,short msgType,byte lastFlag,char* jname);
 // extern "C" void spdInitJournal(char* dir, char* jname);
+extern "C" int spdReadCSV(char* filename, char* jname);
+
 long spdwriter(char* data,int len,short msgType,byte lastFlag,char* jname){
     int cpu_id_ = 1;
     cpu_set_affinity(cpu_id_);
@@ -96,3 +101,33 @@ long spdwriter(char* data,int len,short msgType,byte lastFlag,char* jname){
 //     return;
 //     writer->init(dir,jname);
 // }
+
+//一定要保证数据格式为"char*,short\n"
+int spdReadCSV(char* filename, char* jname){
+    std::ifstream inFile(filename, std::ios::in);
+	std::string lineStr;
+	std::vector<std::vector<std::string> > strArray;
+    char* data = new char[100];
+    short msgType = 0;
+    long wtime = 0;
+    int length = 0;
+	while (getline(inFile, lineStr,','))
+	{
+		// 打印整行字符串
+        strcpy(data,lineStr.c_str());
+        length = strlen(data);
+        getline(inFile,lineStr);
+        msgType=(short)std::stoi(lineStr);
+        wtime = spdwriter(data,length,msgType,0,jname);
+		// 存成二维表结构
+		// std::stringstream ss(lineStr);
+		// std::string str;
+		// std::vector<std::string> lineArray;
+		// // 按照逗号分隔
+		// while (getline(ss, str, ','))
+		// 	lineArray.push_back(str);
+		// strArray.push_back(lineArray);
+	}
+    printf("Write CSV To YJJ Successfully!\n");
+	return 0;
+}

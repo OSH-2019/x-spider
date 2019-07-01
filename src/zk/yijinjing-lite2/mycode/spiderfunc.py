@@ -5,7 +5,8 @@ rd = cdll.LoadLibrary('../build/libreader.so')
 
 wt.spdwriter.restype=(c_long)
 wt.spdwriter.argtypes=(c_char_p,c_int,c_short,c_byte,c_char_p)
-
+wt.spdReadCSV.restype=(c_int)
+wt.spdReadCSV.argtypes=(c_char_p,c_char_p)
 
 rd.spdReadSingleData.restype=(c_char_p)
 rd.spdReadSingleData.argtypes=(c_long,c_char_p)
@@ -16,6 +17,8 @@ rd.spdConvertAllToCSV.restype=(c_int)
 rd.spdConvertAllToCSV.argtypes=(c_long,c_char_p,c_char_p)
 rd.spdExpireJournal.restype=(c_bool)
 rd.spdExpireJournal.argtype=(c_char_p)
+rd.spdExpireJournalByIndex.restype=(c_bool)
+rd.spdExpireJournalByIndex.argtype=(c_int,c_char_p)
 
 #return time stamp
 def writeSingleData(data,msgType,jname):
@@ -49,7 +52,7 @@ def printAllData(startTime,jname):
 def convertAllToCSV(startTime,fileName,jname):
     jname = c_char_p(bytes(jname,'utf-8'))
     fileName = c_char_p(bytes(fileName,'utf-8'))
-    res = rd.spdConvertAllToCSV(startTime,fileName)
+    res = rd.spdConvertAllToCSV(startTime,fileName,jname)
 
 #useless function
 def expireJournal(journalName):
@@ -62,7 +65,16 @@ def initJournal(dir,jname):
     jname = c_char_p(bytes(jname,'utf-8'))
     wt.spdInitJournal(dir,jname)
 
+#useless function
+def expireJournalByIndex(index,journalName):
+    journalName = c_char_p(bytes(journalName,'utf-8'))
+    flag = rd.spdExpireJournalByIndex(index)
 
+#read .csv to yjj
+def readCSV(filename,jname):
+    filename = c_char_p(bytes(filename,'utf-8'))
+    jname = c_char_p(bytes(jname,'utf-8'))
+    flag = wt.spdReadCSV(filename,jname)
 '''
 if __name__ == '__main__':
     for i in range(1,10):

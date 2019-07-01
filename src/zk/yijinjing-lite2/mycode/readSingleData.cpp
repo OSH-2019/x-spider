@@ -164,7 +164,7 @@ int spdConvertAllToCSV(long startTime,char* fileName, char* jname){
         {
             data = (char*)frame->getData();
             msgType = frame->getMsgType();
-            outFile<<data<<", "<<msgType<<std::endl;
+            outFile<<data<<","<<msgType<<std::endl;
             frame = reader->getNextFrame();
         }
     

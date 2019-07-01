@@ -20,6 +20,7 @@ using namespace yijinjing;
 
 extern "C" int spdreader(long wtime,char* jname);
 extern "C" bool spdExpireJournal(char* journalName);
+extern "C" bool spdExpireJournalByIndex(int index,char* journalName);
 int spdreader(long wtime,char* jname){
 
         int cpu_id_ = 0;
@@ -97,7 +98,12 @@ int spdreader(long wtime,char* jname){
 }
 
 bool spdExpireJournal(char* journalName){
-    printf("%s",journalName);
     JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, journalName, -1, "Client_R");
+    printf("%d\n",reader->expireJournalByName(journalName));
     return reader->expireJournalByName(journalName);
+}
+
+bool spdExpireJournalByIndex(int index,char* journalName){
+    JournalReaderPtr reader = yijinjing::JournalReader::create(KUNGFU_JOURNAL_FOLDER, journalName, -1, "Client_R");
+    return reader->expireJournal(index);
 }
