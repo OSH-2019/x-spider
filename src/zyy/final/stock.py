@@ -13,17 +13,45 @@ from queue import Queue
 # Queue 是有关队列的库
 from optparse import OptionParser
 # OptionParser 用于在命令行中添加选项
-from module import spiderfunc
-sys.path.append('/home/wowo/final')
+client = Client("localhost",7210)
 
+from ctypes import *
+
+def printAllData(startTime,jname,rd):
+    jname = c_char_p(bytes(jname,'utf-8'))
+    rd.spdPrintAllData(startTime,jname)
+
+def writeSingleData(data,msgType,jname,wt):
+    strwt = c_char_p(bytes(data,'utf-8'))
+    lenwt = len(data)
+    jname = c_char_p(bytes(jname,'utf-8'))
+    #print('this is lenth:{name}'.format(name=lenwt))
+    wtime = wt.spdwriter(strwt,lenwt,msgType,0,jname)
+    return wtime
 
 def strategy(vector):
-    result="WAIT"
-    if vector[0][3] < vector[1][3] and vector[1][3] < vector[2][3]:
-        result="BUY"
-    elif vector[0][3] > vector[1][3] and vector[1][3] > vector[2][3]:
-        result="SOLD"
-    return (vector[0][0],result,vector[0][30],vector[0][31])	
+    result="{} WAIT".format(vector[1][0])
+    suma=0  #20
+    sumb=0  #5
+    for i in range(1,21):
+        suma = suma + float(vector[i][1])
+    
+    for i in range(16,21):
+        sumb = sumb + float(vector[i][1])
+    
+    meana = suma / 20
+    meanb = sumb / 5
+
+    ans = 0
+    if(meana < meanb):
+        ans = 1 + round((meanb-meana)/0.01)
+        result = "{}  BUY: {}".format(vector[1][0],ans)
+        vector[0] += ans
+    elif meana > meanb and vector[0] != 0 :
+        ans = vector[0]
+        result = "{}  SOLD: {}".format(vector[1][0],ans)
+        vector[0] = 0
+    return result
 
 
 class Analysis():
@@ -33,18 +61,18 @@ class Analysis():
         #self.start()
         self.vector={}
         
-    def run(self,files):
+    def run(self,files,wt,rd):
         result = self.analysis_queue.get()
         print("**********start**********")
         for obj in result: 
-            spiderfunc.writeSingleData(",".join(obj),1,obj[0])
-            self.vector.setdefault(obj[0],[])  
-            self.vector[obj[0]].append(obj)
+            writeSingleData(",".join(obj),1,obj[0],wt)
+            self.vector.setdefault(obj[0],[0])  
+            self.vector[obj[0]].append((obj[0],obj[3]))
             result=()
-            if len(self.vector[obj[0]]) == 4:
-                del self.vector[obj[0]][0]
+            if len(self.vector[obj[0]]) == 20 + 1 + 1:
+                del self.vector[obj[0]][1]
                 result = strategy(self.vector[obj[0]])
-                files.write(",".join(result)+"\n")
+                files.write(obj[30] + "," + obj[31] + "," + result +"\n")
         print("**********end**********")
                 
 
@@ -161,21 +189,25 @@ class Stock(object):
 
 @remote(outputs=0)
 def Task(ctx, nlist, thread_num, sleep_time):
-    files=open("./ans.txt","w")
+    files=open("/root/ans.txt","w")
+    files.write("a,saad\n")
+    sys.path.append("/root")
+    #__import__("spiderfunc")
+    wt = cdll.LoadLibrary('/root/libwriter.so')
+    rd = cdll.LoadLibrary('/root/libreader.so')
     #files.write("fsdjkfsjkfhkj")
     liststr = ",".join(nlist)
     analysis_queue = Queue()
     stock = Stock(liststr, thread_num, analysis_queue)
     analysis = Analysis(analysis_queue)
-    for k in range(10):
+    for k in range(50):
         stock.del_params()
-        analysis.run(files)
-        time.sleep(1)
+        analysis.run(files,wt,rd)
+        time.sleep(0.01)
     files.close()
 
 if __name__ == '__main__':
 # 该脚本用于直接运行，而不能被 import
-    client = Client("localhost",7210)
     parser = OptionParser(description="Query the stock's value.", usage="%prog [-c] [-s] [-t]", version="%prog 1.0")
     # 生成命令行说明
     # %prog 将会以当前程序名的字符串来代替    
