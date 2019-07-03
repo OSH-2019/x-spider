@@ -74,12 +74,3 @@ if __name__ == '__main__':
         print(str1)
         print(f2)
 '''
-
-
-#for i in range(1,100):
-#   f2 = rd.myreader()
-
-    
-
-
-

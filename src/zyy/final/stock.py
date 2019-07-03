@@ -1,5 +1,4 @@
-#__author__ = 'felix'
-# 原作者为 felix
+#__author__ = 'spider'
 from rain.client import Client,remote,Output
 import requests
 # requests 用于爬取新浪股票 API
