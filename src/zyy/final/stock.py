@@ -202,7 +202,7 @@ def Task(ctx, nlist, thread_num, sleep_time):
     for k in range(50):
         stock.del_params()
         analysis.run(files,wt,rd)
-        time.sleep(0.01)
+        time.sleep(sleep_time)
     files.close()
 
 if __name__ == '__main__':
