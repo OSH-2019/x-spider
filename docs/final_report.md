@@ -50,31 +50,13 @@ rain可以以server方式启动，此时rain所在机器为主机。也可以gov
 
 如果想进行简单的测试，则主机与节点在同一台物理机器上，可以按以下方式操作:
 
-1. 将final文件夹下所有内容拷贝至主机下
-
-   ```
-   /root
-   ```
-
-   中。
+1. 将final文件夹下所有内容拷贝至主机下`/root`中。
 
    ```
    cp final/* /root
    ```
 
-2. 切换目录至
-
-   ```
-   /root
-   ```
-
-   ，并使用
-
-   ```
-   --simple
-   ```
-
-   的方式启动rain。以下代码会在本地机器上创建server，并使用本地的一个核作为节点来运行程序。
+2. 切换目录至```/root```，并使用```--simple```的方式启动rain。以下代码会在本地机器上创建server，并使用本地的一个核作为节点来运行程序。
 
    ```
    cd /root
@@ -119,26 +101,14 @@ rain可以以server方式启动，此时rain所在机器为主机。也可以gov
 
 1. 将final文件夹下所有内容拷贝至主机下`/root`中。
 
-2. 切换目录至
+2. 切换目录至```/root```，以server方式启动rain。有以下两种启动方式。以下方式只会启动主机上的server，需要在节点显式地与主机建立联系。
 
    ```
-   /root
-   ```
-
-   ，以server方式启动rain。有以下两种启动方式。以下方式只会启动主机上的server，需要在节点显式地与主机建立联系。
-
-   ```
-   ./rain server &
+    ./rain server &
    # only start server
    ```
 
-   以下方式会在启动主机上server时，通过ssh连接节点，并以governor方式启动节点上的rain，控制节点与主机通信。
-
-   ```
-   <host file name>
-   ```
-
-   为一个文件，一行一个ip。
+   以下方式会在启动主机上server时，通过ssh连接节点，并以governor方式启动节点上的rain，控制节点与主机通信。```<host file name>```为一个文件，一行一个ip。
 
    ```
    ./rain start --governor-host-file=<host file name>
@@ -149,13 +119,7 @@ rain可以以server方式启动，此时rain所在机器为主机。也可以gov
 
 1. 将final文件夹下所有内容拷贝至主机下`/root`中。
 
-2. 切换目录至
-
-   ```
-   /root
-   ```
-
-   ，若主机只启动了server，按照以下方式显式地连接主机。
+2. 切换目录至```/root```，若主机只启动了server，按照以下方式显式地连接主机。
 
    ```
    ./rain governor <server ip> [-p <port>]
