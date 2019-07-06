@@ -155,19 +155,19 @@ rain可以以server方式启动，此时rain所在机器为主机。也可以gov
 
 使用C++和连续写入的方式可以将数据最快地写入yijinjing数据库。下图是测量连续写入1000条数据的时间，求出4000次测量的均值、方差、最小值、最大值、有效次数，整个测量过程重复10次的结果。可见，写入1000次平均耗时约为70000ns。
 
-![Screenshot from 2019-07-04 21-52-55](/home/qi/Pictures/Screenshot%20from%202019-07-04%2021-52-55.png)
+![c++/yijinjing](./files/c++_yijinjing.png)
 
 ##### 4.1.2.2 使用python向yijinjing逐次写入数据
 
 下图是使用python逐次写入yijinjing，求出写入4000条数据的时间的平均值、方差、最小值、最大值。可见，每写入一条数据平均耗时约为0.6ms。
 
-![Screenshot from 2019-07-04 22-16-44](/home/qi/Pictures/Screenshot%20from%202019-07-04%2022-16-44.png)
+![python/yijinjing](./files/python_yijinjing.png)
 
 ##### 4.1.2.3 使用python向MySQL逐次写入数据
 
 下图是使用python逐次写入MySQL，求出写入4000条数据的时间的平均值。可见，每写入一条数据平均耗时7ms，远大于yijinjing的平均值0.6ms。
 
-![Screenshot from 2019-07-04 21-47-21](/home/qi/Pictures/Screenshot%20from%202019-07-04%2021-47-21.png)
+![python/mysql](./files/python_mysql.png)
 
 由上面三个测试可见，yijinjing数据库的写入速度远远快于常用的MySQL数据库。
 
